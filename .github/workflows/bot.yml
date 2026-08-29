@@ -1,0 +1,24 @@
+name: crypto-alert-bot
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - run: python main.py --once
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BYBIT_DEMO_API_KEY: ${{ secrets.BYBIT_DEMO_API_KEY }}
+          BYBIT_DEMO_API_SECRET: ${{ secrets.BYBIT_DEMO_API_SECRET }}
+          SYMBOLS: "BTC/USDT,ETH/USDT,SOL/USDT"
+          TIMEFRAME: "15m"
+          MIN_CONFIDENCE_SCORE: "70"
+          AUTO_TRADE_DEMO: "true"
